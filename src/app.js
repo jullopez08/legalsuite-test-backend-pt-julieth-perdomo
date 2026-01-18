@@ -1,3 +1,5 @@
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 const express = require('express');
 const lawyerRouter = require("./routes/lawyer.router");
 const legalCaseRouter = require("./routes/legalCase.router");
@@ -13,7 +15,7 @@ app.use(express.json());
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'API running' });
 });
-
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/auth", authRouter);
 app.use("/api/legal-cases", legalCaseRouter);
 app.use("/api/lawyers", lawyerRouter);

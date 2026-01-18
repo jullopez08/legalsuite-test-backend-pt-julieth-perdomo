@@ -1,4 +1,4 @@
-const sequelize = require('../config/database');
+const sequelize = require('../../config/database');
 const Lawyer = require('./Lawyer');
 const LegalCase = require('./LegalCase');
 

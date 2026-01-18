@@ -26,7 +26,7 @@ Este proyecto fue desarrollado como prueba técnica backend usando Node.js, Expr
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/tu-usuario/legalsuite-backend.git
+git clone https://github.com/tu-usuario/legalsuite-test-backend-pt-julieth-perdomo.git
 cd legalsuite-backend
 ```
 
@@ -89,53 +89,6 @@ Ideal para desarrollo y pruebas.
   "dev": "nodemon src/server.js",
   "db:reset": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
 }
-```
-
----
-
-## Estructura del Proyecto
-
-```
-.
-├── config/
-├── migrations/
-├── models/
-├── seeders/
-├── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middlewares/
-│   ├── services/
-│   └── server.js
-├── .env
-├── docker-compose.yml
-├── package.json
-└── README.md
-```
-
----
-
-## Endpoints
-
-### Autenticación
-- POST `/api/auth/login`
-
-### Abogados
-- POST `/api/lawyers`
-- GET `/api/lawyers`
-- GET `/api/lawyers/:id`
-
-### Casos Legales
-- POST `/api/legal-cases`
-- GET `/api/legal-cases`
-- GET `/api/legal-cases/:id`
-- PUT `/api/legal-cases/:id/assign`
-- PUT `/api/legal-cases/:id/transfer`
-
-### Reportes
-- GET `/api/reports/lawyers/:id/cases`
-
----
 
 ## Seguridad
 - Autenticación JWT
@@ -182,7 +135,7 @@ npm start
 
 ## Documentación
 - Swagger: `/api/docs`
-- Colección Postman incluida
+- (http://localhost:3000/api/docs/#/)
 
 ---
 

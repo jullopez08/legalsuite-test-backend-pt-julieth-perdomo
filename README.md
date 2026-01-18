@@ -89,7 +89,7 @@ Ideal para desarrollo y pruebas.
   "dev": "nodemon src/server.js",
   "db:reset": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
 }
-
+```
 ## Seguridad
 - Autenticación JWT
 - Passwords encriptados con bcrypt

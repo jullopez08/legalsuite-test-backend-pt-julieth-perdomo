@@ -47,6 +47,7 @@ const LegalCase = sequelize.define(
     },
     {
         timestamps: true,
+        underscored: true,
         tableName: 'legal_cases'
     }
 )

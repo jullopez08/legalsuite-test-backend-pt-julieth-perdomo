@@ -36,6 +36,7 @@ const Lawyer = sequelize.define(
     },
     {
         timestamps: true,
+        underscored: true,
         tableName: 'lawyers'
     }
     

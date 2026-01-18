@@ -1,7 +1,6 @@
-const { LegalCase, Lawyer, sequelize,DataTypes} = require("../models");
+const { LegalCase, Lawyer, sequelize } = require("../models");
 const { isValidStatus } = require("../utils/validators");
-const { Op } = require("sequelize");
-const  VALID_CASE_TYPE =["civil", "criminal","labor","commercial"];
+const VALID_CASE_TYPE = ["civil", "criminal", "labor", "commercial"];
 const VALID_STATUS = ["pending", "assigned", "in_progress", "resolved"];
 
 const getAllCases = async (req, res, next) => {
@@ -13,8 +12,8 @@ const getAllCases = async (req, res, next) => {
       return res.status(400).json({ message: "Page y limiy no validos" });
     }
     if (status && !VALID_STATUS.includes(status)) {
-  return res.status(400).json({ message: "Status inválido" });
-}
+      return res.status(400).json({ message: "Status inválido" });
+    }
     const where = {};
     if (status) where.status = status;
 
@@ -24,6 +23,8 @@ const getAllCases = async (req, res, next) => {
       limit,
       order: [["created_at", "DESC"]],
       include: Lawyer,
+      distinct: true,
+      subQuery: false,
     });
     res.status(200).json({
       data: rows,
@@ -41,9 +42,16 @@ const getAllCases = async (req, res, next) => {
 
 const createCase = async (req, res, next) => {
   try {
-    const { case_number, plaintiff, defendant, case_type, description, status } = req.body;
+    const {
+      case_number,
+      plaintiff,
+      defendant,
+      case_type,
+      description,
+      status,
+    } = req.body;
 
-    if (!case_number || !plaintiff || !defendant || !case_type ) {
+    if (!case_number || !plaintiff || !defendant || !case_type) {
       return res.status(400).json({ message: "Faltan datos" });
     }
     if (!VALID_CASE_TYPE.includes(req.body.case_type)) {
@@ -54,7 +62,7 @@ const createCase = async (req, res, next) => {
     }
     const existingCase = await LegalCase.findOne({
       where: { case_number: req.body.case_number },
-    })
+    });
     if (existingCase) {
       return res.status(400).json({ message: "Ya existe" });
     }
@@ -72,44 +80,6 @@ const createCase = async (req, res, next) => {
     next(error);
   }
 };
-const updateCase = async (req, res, next) => {
-    try {
-        const { case_number, plaintiff, defendant, case_type, description, status } = req.body;
-
-        const legalCase = await LegalCase.findByPk(req.params.id);
-        if (!legalCase) {
-            return res.status(404).json({ message: "No encontrado" });
-        }
-        if (case_number) {
-          const existingCase = await LegalCase.findOne({
-            where:{
-                case_number,
-                id: { [Op.ne]: legalCase.id }
-            }
-        })
-        if (existingCase) {
-            return res.status(400).json({ message: "Ya existe el numero de caso" });
-        }  
-        }
-        if (case_type && !VALID_CASE_TYPE.includes(case_type)) {
-            return res.status(400).json({ message: "Invalido" });
-        }
-        if (status && !VALID_STATUS.includes(status)) {
-            return res.status(400).json({ message: "Invalido" });
-        }
-
-        legalCase.case_number = case_number || legalCase.case_number;
-        legalCase.plaintiff = plaintiff || legalCase.plaintiff;
-        legalCase.defendant = defendant || legalCase.defendant;
-        legalCase.case_type = case_type || legalCase.case_type;
-        legalCase.description = description || legalCase.description;
-        legalCase.status = status   || legalCase.status;
-        await legalCase.save();
-        res.status(200).json(legalCase);
-    } catch (error) {
-        next (error);
-    }
-}
 const getOneCase = async (req, res, next) => {
   try {
     const findIdCase = await LegalCase.findByPk(req.params.id, {
@@ -154,7 +124,8 @@ const assignLawyerToCase = async (req, res, next) => {
 };
 
 const transferCase = async (req, res, next) => {
-  const { caseId, new_lawyer_id } = req.body;
+  const caseId = req.params.id;
+  const { new_lawyer_id } = req.body;
   const t = await sequelize.transaction();
   try {
     const legalCase = await LegalCase.findByPk(caseId, { transaction: t });
@@ -191,7 +162,6 @@ const transferCase = async (req, res, next) => {
 module.exports = {
   getAllCases,
   createCase,
-  updateCase,
   getOneCase,
   assignLawyerToCase,
   transferCase,

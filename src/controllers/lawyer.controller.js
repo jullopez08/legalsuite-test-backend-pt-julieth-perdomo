@@ -1,5 +1,5 @@
-const { Lawyer, Sequelize, LegalCase } = require("../models");
-const { Op, literal } = require("sequelize");
+const { Lawyer, LegalCase } = require("../models");
+const {  literal } = require("sequelize");
 const { isValidEmail, isValidStatus } = require("../utils/validators");
 
 const createLawyer = async (req, res, next) => {
